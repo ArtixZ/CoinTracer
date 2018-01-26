@@ -2,9 +2,9 @@ var express = require('express');
 var router = express.Router();
 
 /* GET home page. */
-router.get('/', function(req, res, next) {
-  res.render('index', { title: 'Express' });
-});
+// router.get('/', function(req, res, next) {
+//   res.render('index', { title: 'Express' });
+// });
 
 
 var config_uc = ['ETH_BTC', 'TRX_BTC', 'VEN_BTC', 'EOS_BTC', 'BNB_BTC', 'XVG_BTC', 'ICX_BTC', 'XRP_BTC', 'ELF_BTC', 'WTC_BTC', 'NEO_BTC', 'CND_BTC', 'QTUM_BTC', 'VIBE_BTC', 'ADA_BTC', 'BCC_BTC', 'APPC_BTC', 'LTC_BTC', 'LINK_BTC', 'SUB_BTC', 'MDA_BTC', 'XLM_BTC', 'POE_BTC', 'SNGLS_BTC', 'HSR_BTC\N', 'IOTA_BTC', 'WABI_BTC', 'INS_BTC', 'BNT_BTC', 'MTL_BTC', 'BTS_BTC', 'ETC_BTC', 'BRD_BTC', 'LRC_BTC', 'BCPT_BTC', 'AION_BTC', 'NEBL_BTC', 'LEND_BTC', 'ZRX_BTC', 'REQ_BTC', 'GTO_BTC', 'OMG_BTC', 'TNB_BTC', 'OST_BTC', 'BCD_BTC', 'DNT_BTC', 'AMB_BTC', 'ENG_BTC', 'BTG_BTC', 'FUN_BTC', 'ARN_BTC', 'XMR_BTC', 'CDT_BTC', 'QSP_BTC', 'SALT_BTC', 'KNC_BTC', 'WINGS_BTC', 'STRAT_BTC', 'CMT_BTC', 'POWR_BTC', 'AST_BTC', 'TRIG_BTC', 'LSK_BTC', 'LUN_BTC', 'MCO_BTC', 'GAS_BTC', 'FUEL_BTC', 'DASH_BTC', 'MANA_BTC', 'ZEC_BTC', 'RLC_BTC', 'BAT_BTC', 'EDO_BTC', 'RCN_BTC\N', 'NULS_BTC', 'SNT_BTC', 'ENJ_BTC', 'CTR_BTC', 'KMD_BTC', 'ARK_BTC', 'GVT_BTC', 'MTH_BTC', 'MOD_BTC', 'GXS_BTC', 'BQX_BTC', 'TNT_BTC', 'SNM_BTC', 'OAX_BTC\N', 'YOYO_BTC', 'EVX_BTC', 'ADX_BTC', 'WAVES_BTC', 'NAV_BTC', 'STORJ_BTC', 'PPT_BTC', 'VIB_BTC', 'XZC_BTC', 'DGD_BTC', 'DLT_BTC', 'ICN_BTC', 'RDN_BTC'];
@@ -105,13 +105,6 @@ request(options, function (error, response, body) {
     console.log(body);
 })
 };
-
-
-
-
-
-
-
 
 
 module.exports = router;
