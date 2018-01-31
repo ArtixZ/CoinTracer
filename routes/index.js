@@ -1,5 +1,9 @@
 var express = require('express');
 var router = express.Router();
+var request = require("request");
+
+
+var poloniex_dataInjection = require('./DataInjection/Poloniex');
 
 /* GET home page. */
 // router.get('/', function(req, res, next) {
@@ -13,98 +17,67 @@ var coins  = ['eth', 'trx', 'ven', 'eos', 'bnb', 'xvg', 'icx', 'xrp', 'elf', 'wt
 var coins_Bittrex = ['BTC-ETH', 'BTC-TRX', 'BTC-VEN', 'BTC-EOS', 'BTC-BNB', 'BTC-XVG', 'BTC-ICX', 'BTC-XRP', 'BTC-ELF', 'BTC-WTC', 'BTC-NEO', 'BTC-CND', 'BTC-QTUM', 'BTC-VIBE', 'BTC-ADA', 'BTC-BCC', 'BTC-APPC', 'BTC-LTC', 'BTC-LINK', 'BTC-SUB', 'BTC-MDA', 'BTC-XLM', 'BTC-POE', 'BTC-SNGLS', 'BTC-HSR', 'BTC-IOTA', 'BTC-WABI', 'BTC-INS', 'BTC-BNT', 'BTC-MTL', 'BTC-BTS', 'BTC-ETC', 'BTC-BRD', 'BTC-LRC', 'BTC-BCPT', 'BTC-AION', 'BTC-NEBL', 'BTC-LEND', 'BTC-ZRX', 'BTC-REQ', 'BTC-GTO', 'BTC-OMG', 'BTC-TNB', 'BTC-OST', 'BTC-BCD', 'BTC-DNT', 'BTC-AMB', 'BTC-ENG', 'BTC-BTG', 'BTC-FUN', 'BTC-ARN', 'BTC-XMR', 'BTC-CDT', 'BTC-QSP', 'BTC-SALT', 'BTC-KNC', 'BTC-WINGS', 'BTC-STRAT', 'BTC-CMT', 'BTC-POWR', 'BTC-AST', 'BTC-TRIG', 'BTC-LSK', 'BTC-LUN', 'BTC-MCO', 'BTC-GAS', 'BTC-FUEL', 'BTC-DASH', 'BTC-MANA', 'BTC-ZEC', 'BTC-RLC', 'BTC-BAT', 'BTC-EDO', 'BTC-RCN', 'BTC-NULS', 'BTC-SNT', 'BTC-ENJ', 'BTC-CTR', 'BTC-KMD', 'BTC-ARK', 'BTC-GVT', 'BTC-MTH', 'BTC-MOD', 'BTC-GXS', 'BTC-BQX', 'BTC-TNT', 'BTC-SNM', 'BTC-OAX', 'BTC-YOYO', 'BTC-EVX', 'BTC-ADX', 'BTC-WAVES', 'BTC-NAV', 'BTC-STORJ', 'BTC-PPT', 'BTC-VIB', 'BTC-XZC', 'BTC-DGD', 'BTC-DLT', 'BTC-ICN', 'BTC-RDN'];
 var coins_len = config_lc.length;
 
-//liqui.io marketing depth: GET
-var request = require("request");
-for (i = 0; i < coins_len; i++) {
-    var options = {
-        method: 'GET',
-        url: 'https://api.liqui.io/api/3/depth/' + config_lc[i],
-        headers:
-            {
-                'postman-token': 'a6ff1c1b-29e1-0695-2ff1-6f054efd65d5',
-                'cache-control': 'no-cache'
-            }
-    };
+// liqui.io marketing depth: GET
+// for (i = 0; i < coins_len; i++) {
+//     var options = {
+//         method: 'GET',
+//         url: 'https://api.liqui.io/api/3/depth/' + config_lc[i],
+//         headers:
+//             {
+//                 'postman-token': 'a6ff1c1b-29e1-0695-2ff1-6f054efd65d5',
+//                 'cache-control': 'no-cache'
+//             }
+//     };
 
-    request(options, function (error, response, body) {
-        if (error) throw new Error(error);
+//     request(options, function (error, response, body) {
+//         if (error) throw new Error(error);
 
-        console.log(body);
-    })
-};
+//         console.log(body);
+//     })
+// };
 
+var PoloniexPrices = poloniex_dataInjection();
 
+// //www.aex.com marketing depth: GET
 
+// for (i = 0; i < coins.length; i++) {
+//     var request = require("request");
 
-// Poloniex marketing depth: GET
+//     var options = {
+//         method: 'GET',
+//         url: 'https://api.aex.com/depth.php',
+//         qs: {c: coins[i], mk_type: 'btc'},
+//         headers:
+//             {
+//                 'postman-token': '03a6b958-608d-d718-6ded-dc27dfb0a14a',
+//                 'cache-control': 'no-cache'
+//             }
+//     };
 
-for (i = 0; i < coins_len; i++) {
-    var request = require("request");
+//     request(options, function (error, response, body) {
+//         if (error) throw new Error(error);
 
-    var options = {
-        method: 'GET',
-        url: 'https://poloniex.com/public',
-        qs:
-            {
-                command: 'returnOrderBook',
-                currencyPair: config_uc[i],
-                depth: '5'
-            },
-        headers:
-            {
-                'postman-token': '7d6490ec-cdf0-98de-504f-7c7c61547f1b',
-                'cache-control': 'no-cache'
-            }
-    };
+//         console.log(body);
+//     })
+// };
 
-    request(options, function (error, response, body) {
-        if (error) throw new Error(error);
+// //Bittrex marketing depth: GET
+// for (i = 0; i < coins_Bittrex.length; i++) {
+// var request = require("request");
 
-        console.log(body);
-    })
-};
+// var options = { method: 'GET',
+//     url: 'https://bittrex.com/api/v1.1/public/getorderbook',
+//     qs: { market: coins_Bittrex[i], type: 'both' },
+//     headers:
+//         { 'postman-token': 'fad1748c-2c2e-9edc-0bf6-0998d3746499',
+//             'cache-control': 'no-cache' } };
 
+// request(options, function (error, response, body) {
+//     if (error) throw new Error(error);
 
-//www.aex.com marketing depth: GET
-
-for (i = 0; i < coins.length; i++) {
-    var request = require("request");
-
-    var options = {
-        method: 'GET',
-        url: 'https://api.aex.com/depth.php',
-        qs: {c: coins[i], mk_type: 'btc'},
-        headers:
-            {
-                'postman-token': '03a6b958-608d-d718-6ded-dc27dfb0a14a',
-                'cache-control': 'no-cache'
-            }
-    };
-
-    request(options, function (error, response, body) {
-        if (error) throw new Error(error);
-
-        console.log(body);
-    })
-};
-
-//Bittrex marketing depth: GET
-for (i = 0; i < coins_Bittrex.length; i++) {
-var request = require("request");
-
-var options = { method: 'GET',
-    url: 'https://bittrex.com/api/v1.1/public/getorderbook',
-    qs: { market: coins_Bittrex[i], type: 'both' },
-    headers:
-        { 'postman-token': 'fad1748c-2c2e-9edc-0bf6-0998d3746499',
-            'cache-control': 'no-cache' } };
-
-request(options, function (error, response, body) {
-    if (error) throw new Error(error);
-
-    console.log(body);
-})
-};
+//     console.log(body);
+// })
+// };
 
 
 module.exports = router;
