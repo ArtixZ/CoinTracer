@@ -13,22 +13,14 @@ function requestAsync(url) {
 
 function repeatCall(interval, coinPairs, func) {
     const p = new Promise(function(resolve, reject) {
-        let prices = [];
+        let calls = [];
         let count = 0;
         const int = setInterval(function() {
-            if(count < coinPairs.length) {
-                rp(func(coinPairs[count])).then(res => {
-                    res = JSON.parse(res);
-                    res['coin_pair'] = coinPairs[count];
-                    console.log(res);
-                    prices.push(res);
-                    count++;
-                }).catch(err => {
-                    console.log(err);
-                })
+            if(count++ < coinPairs.length) {
+                calls.push(rp(func(coinPairs[count])));
             } else {
                 clearInterval(int);
-                resolve(prices);
+                resolve(calls);
             }
             
         }, interval);
