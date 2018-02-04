@@ -30,6 +30,15 @@ function repeatCall(interval, coinPairs, func) {
     
     // return prices;
 }
+
+function repeatCall_noInterval(coinPairs, func) {
+    let calls = [];
+    for(let i in coinPairs) {
+        calls.push(rp(func(coinPairs[i])));
+    }
+
+    return Promise.all(calls);
+}
 // Promise.all(ps)
 //         .then(responses => {
 //             console.log(responses);
@@ -40,4 +49,5 @@ function repeatCall(interval, coinPairs, func) {
 module.exports = {
     requestAsync,
     repeatCall,
+    repeatCall_noInterval,
 };
