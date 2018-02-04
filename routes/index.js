@@ -7,6 +7,9 @@ var poloniex_dataInjection = require('./DataInjection/Poloniex');
 var liqui_dataInjection = require('./DataInjection/Liqui');
 var bittrex_dataInjection = require('./DataInjection/Bittrex');
 var binance_dataInjection = require('./DataInjection/Binance');
+var huobi_dataInjection = require('./DataInjection/Huobi');
+var kubi_dataInjection = require('./DataInjection/Kubi');
+var gate_dataInjection = require('./DataInjection/Gate');
 
 /* GET home page. */
 // router.get('/', function(req, res, next) {
@@ -52,11 +55,31 @@ var binance_dataInjection = require('./DataInjection/Binance');
 //             console.log(resAry);
 //         })
 
+var bittrexPrices = bittrex_dataInjection()
+bittrexPrices
+        .then( resAry => {
+            console.log(resAry);
+        })
+
 var binancePrices = binance_dataInjection();
 binancePrices.then( resAry => {
     console.log(resAry);
 })
 
+var huobiPrices = huobi_dataInjection();
+huobiPrices.then( resAry => {
+    console.log(resAry);
+})
+
+var kubiPrices = kubi_dataInjection();
+kubiPrices.then( resAry => {
+    console.log(resAry);
+})
+
+var gatePrices = gate_dataInjection();
+gatePrices.then( resAry => {
+    console.log(resAry);
+})
 // //Bittrex marketing depth: GET
 // for (i = 0; i < coins_Bittrex.length; i++) {
 // var request = require("request");
