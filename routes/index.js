@@ -1,3 +1,5 @@
+// import { config } from '../../../Users/Dongyue/AppData/Local/Microsoft/TypeScript/2.6/node_modules/@types/bluebird';
+
 var express = require('express');
 var router = express.Router();
 var request = require("request");
@@ -16,12 +18,6 @@ var gate_dataInjection = require('./DataInjection/Gate');
 //   res.render('index', { title: 'Express' });
 // });
 
-
-// var poloniexPrices = poloniex_dataInjection();
-// poloniexPrices.then( calls => Promise.all(calls))
-//         .then( resAry => {
-//             console.log(resAry);
-//         })
 
 // var liquiPrices = liqui_dataInjection();
 // console.log(liquiPrices)
@@ -55,48 +51,40 @@ var gate_dataInjection = require('./DataInjection/Gate');
 //             console.log(resAry);
 //         })
 
+var poloniexPrices = poloniex_dataInjection();
+// poloniexPrices
+//         .then( resAry => {
+//             console.log(resAry);
+//         })
+
 var bittrexPrices = bittrex_dataInjection()
-bittrexPrices
-        .then( resAry => {
-            console.log(resAry);
-        })
+// bittrexPrices
+//         .then( resAry => {
+//             console.log(resAry);
+//         })
 
 var binancePrices = binance_dataInjection();
-binancePrices.then( resAry => {
-    console.log(resAry);
-})
+// binancePrices.then( resAry => {
+//     console.log(resAry);
+// })
 
 var huobiPrices = huobi_dataInjection();
-huobiPrices.then( resAry => {
-    console.log(resAry);
-})
+// huobiPrices.then( resAry => {
+//     console.log(resAry);
+// })
 
 var kubiPrices = kubi_dataInjection();
-kubiPrices.then( resAry => {
-    console.log(resAry);
-})
+// kubiPrices.then( resAry => {
+//     console.log(resAry);
+// })
 
 var gatePrices = gate_dataInjection();
-gatePrices.then( resAry => {
-    console.log(resAry);
-})
-// //Bittrex marketing depth: GET
-// for (i = 0; i < coins_Bittrex.length; i++) {
-// var request = require("request");
-
-// var options = { method: 'GET',
-//     url: 'https://bittrex.com/api/v1.1/public/getorderbook',
-//     qs: { market: coins_Bittrex[i], type: 'both' },
-//     headers:
-//         { 'postman-token': 'fad1748c-2c2e-9edc-0bf6-0998d3746499',
-//             'cache-control': 'no-cache' } };
-
-// request(options, function (error, response, body) {
-//     if (error) throw new Error(error);
-
-//     console.log(body);
+// gatePrices.then( resAry => {
+//     console.log(resAry);
 // })
-// };
 
+Promise.all([ bittrexPrices, binancePrices, huobiPrices, kubiPrices, gatePrices]).then(res => {
+    console.log(res);
+})
 
 module.exports = router;

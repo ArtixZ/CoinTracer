@@ -18,7 +18,8 @@ module.exports = function () {
         return options;
     };
 
-    const promise = repeatCall(Math.floor(1000/100), PoloniexPairs, func);
+    const promise = repeatCall(Math.floor(1000/100), PoloniexPairs, func)
+    // .then(calls => { return Promise.all(calls) });
 
     return promise
 }
