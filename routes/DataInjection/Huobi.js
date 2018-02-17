@@ -13,7 +13,7 @@ module.exports = function () {
         return options;
     };
 
-    const promise = repeatCall_noInterval(HuobiPairs, func);
+    const promise = repeatCall_noInterval(HuobiPairs, func, "huobi");
 
     return promise
 }

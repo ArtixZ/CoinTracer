@@ -1,6 +1,7 @@
 const rp = require('request-promise');
-
 const request = require("request");
+
+const wrappingStructure = require("../configs/standard").wrappingStructure;
 
 function requestAsync(url) {
     return new Promise(function(resolve, reject) {
@@ -31,7 +32,7 @@ function repeatCall(interval, coinPairs, func) {
     // return prices;
 }
 
-function repeatCall_noInterval(coinPairs, func) {
+function repeatCall_noInterval(coinPairs, func, plateformName) {
     let calls = [];
     for(let i in coinPairs) {
         calls.push(rp(func(coinPairs[i])));
@@ -40,11 +41,27 @@ function repeatCall_noInterval(coinPairs, func) {
     
     return Promise.all(calls)
         .then(res => {
+            let data = [];
+
             for(let i=0; i<res.length; i++) {
+                data.push({})
                 res[i] = JSON.parse(res[i])
-                res[i]["coinName"] = standardPairs[i]
+                data[i]["coinName"] = standardPairs[i]
+                const parentName = wrappingStructure[plateformName]["parenName"]
+                if(parentName) {
+                    const buyName = wrappingStructure[plateformName]["buyName"]
+                    const sellName = wrappingStructure[plateformName]["sellName"]
+                    data[i]["buy"] = res[i][parentName][buyName];
+                    data[i]["sell"] = res[i][parentName][sellName];
+
+                } else {
+                    const buyName = wrappingStructure[plateformName]["buyName"]
+                    const sellName = wrappingStructure[plateformName]["sellName"]
+                    data[i]["buy"] = res[i][buyName];
+                    data[i]["sell"] = res[i][sellName];
+                }
             }
-            return res;
+            return data;
         });
 }
 

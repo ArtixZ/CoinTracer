@@ -12,7 +12,7 @@ module.exports = function () {
         return options;
     };
 
-    const promise = repeatCall_noInterval(GatePairs, func);
+    const promise = repeatCall_noInterval(GatePairs, func, "gate");
 
     return promise
 }
