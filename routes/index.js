@@ -2,8 +2,7 @@
 
 var express = require('express');
 var router = express.Router();
-var request = require("request");
-
+var async = require('async');
 
 var poloniex_dataInjection = require('./DataInjection/Poloniex');
 var liqui_dataInjection = require('./DataInjection/Liqui');
@@ -83,8 +82,45 @@ var gatePrices = gate_dataInjection();
 //     console.log(resAry);
 // })
 
-Promise.all([ bittrexPrices, binancePrices, huobiPrices, kubiPrices, gatePrices]).then(res => {
-    console.log(res);
+// Promise.all([ poloniexPrices, bittrexPrices, binancePrices, huobiPrices, kubiPrices, gatePrices ]).then(res => {
+//     console.log(res);
+// })
+
+
+async.parallel({
+    poloniex: function(callback) {
+        poloniexPrices.then(res => {
+            callback(null, res)
+        })
+    },
+    bittrex: function(callback) {
+        bittrexPrices.then(res => {
+            callback(null, res);
+        })
+    },
+    binance: function(callback) {
+        binancePrices.then(res => {
+            callback(null, res);
+        })
+    },
+    huobi: function(callback) {
+        huobiPrices.then(res => {
+            callback(null, res);
+        })
+    },
+    kubi: function(callback) {
+        kubiPrices.then(res => {
+            callback(null, res);
+        })
+    },
+    gate: function(callback) {
+        gatePrices.then(res => {
+            callback(null, res);
+        })
+    },
+    
+}, (err, res) => {
+    console.log(res)
 })
 
 module.exports = router;

@@ -36,8 +36,25 @@ function repeatCall_noInterval(coinPairs, func) {
     for(let i in coinPairs) {
         calls.push(rp(func(coinPairs[i])));
     }
+    const standardPairs = standardlizeCoinPairs(coinPairs);
+    
+    return Promise.all(calls)
+        .then(res => {
+            for(let i=0; i<res.length; i++) {
+                res[i] = JSON.parse(res[i])
+                res[i]["coinName"] = standardPairs[i]
+            }
+            return res;
+        });
+}
 
-    return Promise.all(calls);
+function standardlizeCoinPairs(coinPairs) {
+    return coinPairs.map(str => {
+        str = str.toLowerCase();
+        str = str.replace(/[^A-Z0-9]+/ig, "") //remove _ - characters.
+        str = str.replace('btc', '') // remove btc
+        return str
+    })
 }
 // Promise.all(ps)
 //         .then(responses => {
