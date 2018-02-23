@@ -14,7 +14,7 @@ module.exports = function () {
         return options;
     };
 
-    const promise = repeatCall_noInterval(BinancePairs, func);
+    const promise = repeatCall_noInterval(BinancePairs, func, "binance");
 
     return promise
 }

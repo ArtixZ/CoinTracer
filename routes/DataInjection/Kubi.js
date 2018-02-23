@@ -14,7 +14,7 @@ module.exports = function () {
         return options;
     };
 
-    const promise = repeatCall_noInterval(KubiPairs, func);
+    const promise = repeatCall_noInterval(KubiPairs, func, "kubi");
 
     return promise
 }

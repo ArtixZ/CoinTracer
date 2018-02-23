@@ -35,7 +35,7 @@ module.exports = function () {
         return options;
     };
 
-    const promise = repeatCall_noInterval(BittrexPairs, func);
+    const promise = repeatCall_noInterval(BittrexPairs, func, "bittrex");
 
     return promise
 }

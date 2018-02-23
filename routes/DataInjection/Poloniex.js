@@ -19,7 +19,7 @@ module.exports = function () {
         return options;
     };
 
-    const promise = repeatCall_noInterval(PoloniexPairs, func)
+    const promise = repeatCall_noInterval(PoloniexPairs, func, "poloniex")
     // .then(calls => { return Promise.all(calls) });
 
     return promise
