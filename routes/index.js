@@ -132,12 +132,12 @@ async.parallel({
             if(reArrange[coinName]) {
                 if(reArrange[coinName]["buy"]) {
                     const { price: buyPrice, amount: buyAmount } = reArrange[coinName]["buy"];
-                    highestBuy = buyPrice * buyAmount;
+                    highestBuy = buyPrice;
                 }
 
                 if(reArrange[coinName]["sell"]) {
                     const { price: sellPrice, amount: sellAmount } = reArrange[coinName]["sell"];
-                    lowestSell = sellPrice * sellAmount;
+                    lowestSell = sellPrice;
                 }
                 
             } else {
@@ -146,7 +146,7 @@ async.parallel({
 
             for(let buyRrd of buyAry) {
                 const btcAmount = buyRrd[0] * buyRrd[1];
-                if( btcAmount > BTC_THRESHOLD && btcAmount > highestBuy) {
+                if( btcAmount > BTC_THRESHOLD && Number(buyRrd[priceLocation[pfName]]) > highestBuy) {
                     // reArrange[coinName]["buy"]["price"] = buyRrd[priceLocation[pfName]]
                     // reArrange[coinName]["buy"]["amount"] = buyRrd[1 - priceLocation[pfName]]  
                     // reArrange[coinName]["buy"]["platform"] = pfName
@@ -160,7 +160,7 @@ async.parallel({
 
             for(let sellRrd of sellAry) {
                 const btcAmount = sellRrd[0] * sellRrd[1];
-                if( btcAmount > BTC_THRESHOLD && btcAmount < lowestSell) {
+                if( btcAmount > BTC_THRESHOLD && Number(sellRrd[priceLocation[pfName]]) < lowestSell) {
                     // reArrange[coinName]["sell"]["price"] = sellRrd[priceLocation[pfName]]
                     // reArrange[coinName]["sell"]["amount"] = sellRrd[1 - priceLocation[pfName]]  
                     // reArrange[coinName]["sell"]["platform"] = pfName
