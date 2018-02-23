@@ -27,7 +27,9 @@ function repeatCall(interval, coinPairs, func) {
         }, interval);
     })
 
-    return p;
+    return p.then(calls => {
+        return Promise.all(calls)
+    });
     
     // return prices;
 }

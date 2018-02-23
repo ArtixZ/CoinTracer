@@ -1,8 +1,8 @@
-// import { config } from '../../../Users/Dongyue/AppData/Local/Microsoft/TypeScript/2.6/node_modules/@types/bluebird';
 
 var express = require('express');
 var router = express.Router();
 var async = require('async');
+var _ = require('lodash');
 
 var poloniex_dataInjection = require('./DataInjection/Poloniex');
 var liqui_dataInjection = require('./DataInjection/Liqui');
@@ -12,6 +12,8 @@ var huobi_dataInjection = require('./DataInjection/Huobi');
 var kubi_dataInjection = require('./DataInjection/Kubi');
 var gate_dataInjection = require('./DataInjection/Gate');
 
+var { priceLocation } = require('../configs/standard');
+var { BTC_THRESHOLD } = require('../configs/configs');
 /* GET home page. */
 // router.get('/', function(req, res, next) {
 //   res.render('index', { title: 'Express' });
@@ -50,34 +52,34 @@ var gate_dataInjection = require('./DataInjection/Gate');
 //             console.log(resAry);
 //         })
 
-var poloniexPrices = poloniex_dataInjection();
+// var poloniexPrices = poloniex_dataInjection();
 // poloniexPrices
 //         .then( resAry => {
 //             console.log(resAry);
 //         })
 
-var bittrexPrices = bittrex_dataInjection()
+// var bittrexPrices = bittrex_dataInjection()
 // bittrexPrices
 //         .then( resAry => {
 //             console.log(resAry);
 //         })
 
-var binancePrices = binance_dataInjection();
+// var binancePrices = binance_dataInjection();
 // binancePrices.then( resAry => {
 //     console.log(resAry);
 // })
 
-var huobiPrices = huobi_dataInjection();
+// var huobiPrices = huobi_dataInjection();
 // huobiPrices.then( resAry => {
 //     console.log(resAry);
 // })
 
-var kubiPrices = kubi_dataInjection();
+// var kubiPrices = kubi_dataInjection();
 // kubiPrices.then( resAry => {
 //     console.log(resAry);
 // })
 
-var gatePrices = gate_dataInjection();
+// var gatePrices = gate_dataInjection();
 // gatePrices.then( resAry => {
 //     console.log(resAry);
 // })
@@ -88,39 +90,94 @@ var gatePrices = gate_dataInjection();
 
 
 async.parallel({
-    poloniex: function(callback) {
-        poloniexPrices.then(res => {
-            callback(null, res)
-        })
-    },
-    bittrex: function(callback) {
-        bittrexPrices.then(res => {
-            callback(null, res);
-        })
-    },
+    // poloniex: function(callback) {
+    //     poloniex_dataInjection().then(res => {
+    //         callback(null, res)
+    //     })
+    // },
+    // bittrex: function(callback) {
+    //     bittrex_dataInjection().then(res => {
+    //         callback(null, res);
+    //     })
+    // },
     binance: function(callback) {
-        binancePrices.then(res => {
+        binance_dataInjection().then(res => {
             callback(null, res);
         })
     },
     huobi: function(callback) {
-        huobiPrices.then(res => {
+        huobi_dataInjection().then(res => {
             callback(null, res);
         })
     },
     kubi: function(callback) {
-        kubiPrices.then(res => {
+        kubi_dataInjection().then(res => {
             callback(null, res);
         })
     },
     gate: function(callback) {
-        gatePrices.then(res => {
+        gate_dataInjection().then(res => {
             callback(null, res);
         })
     },
     
-}, (err, res) => {
+},  (err, res) => {
     console.log(res)
+    let reArrange = {};
+    for(let pfName in res) {
+        for(let i in res[pfName]) {
+            const { coinName, buy: buyAry, sell: sellAry } = res[pfName][i];
+            let highestBuy = -Infinity, lowestSell = Infinity;
+
+            if(reArrange[coinName]) {
+                if(reArrange[coinName]["buy"]) {
+                    const { price: buyPrice, amount: buyAmount } = reArrange[coinName]["buy"];
+                    highestBuy = buyPrice * buyAmount;
+                }
+
+                if(reArrange[coinName]["sell"]) {
+                    const { price: sellPrice, amount: sellAmount } = reArrange[coinName]["sell"];
+                    lowestSell = sellPrice * sellAmount;
+                }
+                
+            } else {
+                reArrange[coinName] = {}
+            }
+
+            for(let buyRrd of buyAry) {
+                const btcAmount = buyRrd[0] * buyRrd[1];
+                if( btcAmount > BTC_THRESHOLD && btcAmount > highestBuy) {
+                    // reArrange[coinName]["buy"]["price"] = buyRrd[priceLocation[pfName]]
+                    // reArrange[coinName]["buy"]["amount"] = buyRrd[1 - priceLocation[pfName]]  
+                    // reArrange[coinName]["buy"]["platform"] = pfName
+                    reArrange[coinName]["buy"] = {
+                        "price": Number(buyRrd[priceLocation[pfName]]),
+                        "amount": Number(buyRrd[1 - priceLocation[pfName]]),
+                        "platform": pfName,
+                    }
+                }
+            } 
+
+            for(let sellRrd of sellAry) {
+                const btcAmount = sellRrd[0] * sellRrd[1];
+                if( btcAmount > BTC_THRESHOLD && btcAmount < lowestSell) {
+                    // reArrange[coinName]["sell"]["price"] = sellRrd[priceLocation[pfName]]
+                    // reArrange[coinName]["sell"]["amount"] = sellRrd[1 - priceLocation[pfName]]  
+                    // reArrange[coinName]["sell"]["platform"] = pfName
+                    reArrange[coinName]["sell"] = {
+                        "price": Number(sellRrd[priceLocation[pfName]]),
+                        "amount": Number(sellRrd[1 - priceLocation[pfName]]),
+                        "platform": pfName,
+                    }
+                }
+            }
+            if(_.isEmpty(reArrange[coinName])) {
+                delete reArrange[coinName]
+            }
+        }
+    }
+
+    console.log(reArrange)
 })
 
 module.exports = router;

@@ -23,7 +23,7 @@
 var { 
     BittrexPairs,
 } = require("../../configs/configs");
-const { repeatCall_noInterval } = require("../../utils/utils");
+const { repeatCall, repeatCall_noInterval } = require("../../utils/utils");
 module.exports = function () {
 
     const func = (coinPair) => {
@@ -35,7 +35,7 @@ module.exports = function () {
         return options;
     };
 
-    const promise = repeatCall_noInterval(BittrexPairs, func, "bittrex");
+    const promise = repeatCall(1000/100, BittrexPairs, func, "bittrex");
 
     return promise
 }

@@ -30,5 +30,9 @@ module.exports = {
             buyName: "bids",
             sellName: "asks",
         }
+    },
+    // coinTypes: { poloniex, bittrex, binance, huobi, kubi, gate, },
+    priceLocation: {
+        poloniex: 0, bittrex: 0, binance: 0, huobi: 0, kubi: 0, gate: 0,
     }
 }
