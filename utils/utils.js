@@ -29,6 +29,32 @@ function repeatCall(interval, coinPairs, func) {
 
     return p.then(calls => {
         return Promise.all(calls)
+        .then(res => {
+            let data = [];
+
+            for(let i=0; i<res.length; i++) {
+                data.push({})
+                res[i] = JSON.parse(res[i])
+                data[i]["coinName"] = standardPairs[i]
+                const parentName = wrappingStructure[plateformName]["parenName"]
+                if(parentName) {
+                    const buyName = wrappingStructure[plateformName]["buyName"]
+                    const sellName = wrappingStructure[plateformName]["sellName"]
+                    data[i]["buy"] = res[i][parentName][buyName];
+                    data[i]["sell"] = res[i][parentName][sellName];
+
+                } else {
+                    const buyName = wrappingStructure[plateformName]["buyName"]
+                    const sellName = wrappingStructure[plateformName]["sellName"]
+                    data[i]["buy"] = res[i][buyName];
+                    data[i]["sell"] = res[i][sellName];
+                }
+            }
+            return data;
+        })
+        .catch(err => {
+            console.log(err)
+        });
     });
     
     // return prices;
